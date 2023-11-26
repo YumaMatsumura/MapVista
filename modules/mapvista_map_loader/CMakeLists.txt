@@ -68,7 +68,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
   ament_clang_format(
     CONFIG_FILE
-      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../.clang-format>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../.clang-format>
   )
 endif()
 
