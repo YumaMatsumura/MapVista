@@ -6,7 +6,7 @@ on:
     branches: [master]
 
 jobs:
-  build_simrobo:
+  build_and_test:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
