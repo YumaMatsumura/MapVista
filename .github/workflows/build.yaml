@@ -44,3 +44,4 @@ jobs:
             mapvista_map_converter
             mapvista_map_loader
             mapvista_map_saver
+            mapvista_voxel_grid_filter
