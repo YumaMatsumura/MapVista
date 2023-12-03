@@ -41,4 +41,6 @@ jobs:
           target-ros2-distro: ${{ matrix.ros_distribution }}
           package-name: |
             mapvista_map_msgs
+            mapvista_map_converter
             mapvista_map_loader
+            mapvista_map_saver
