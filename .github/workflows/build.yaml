@@ -40,6 +40,9 @@ jobs:
         with:
           target-ros2-distro: ${{ matrix.ros_distribution }}
           package-name: |
+            mapvista_bringup_launch
+            mapvista_map_launch
+            mapvista_sensing_launch
             mapvista_map_msgs
             mapvista_map_converter
             mapvista_map_loader
