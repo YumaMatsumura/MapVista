@@ -15,7 +15,6 @@ find_package(octomap_ros REQUIRED)
 find_package(pcl_conversions REQUIRED)
 find_package(PCL REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(mapvista_map_msgs REQUIRED)
 
 set(map_converter_executable map_converter)
 set(map_converter_library ${map_converter_executable}_core)
