@@ -32,6 +32,12 @@ def generate_launch_description():
     map_params_path = PathJoinSubstitution(
         [FindPackageShare('mapvista_map_launch'), 'params', 'map_modules_params.yaml']
     )
+    sensing_launch_path = PathJoinSubstitution(
+        [FindPackageShare('mapvista_sensing_launch'), 'launch', 'sensing_modules.launch.py']
+    )
+    sensing_params_path = PathJoinSubstitution(
+        [FindPackageShare('mapvista_sensing_launch'), 'params', 'sensing_modules_params.yaml']
+    )
     rviz_path = PathJoinSubstitution(
         [FindPackageShare('mapvista_bringup_launch'), 'rviz', 'bringup.rviz']
     )
@@ -40,6 +46,8 @@ def generate_launch_description():
     container_name = LaunchConfiguration('container_name')
     map_launch_file = LaunchConfiguration('map_launch_file')
     map_params_file = LaunchConfiguration('map_params_file')
+    sensing_launch_file = LaunchConfiguration('sensing_launch_file')
+    sensing_params_file = LaunchConfiguration('sensing_params_file')
     use_composition = LaunchConfiguration('use_composition')
     use_sim_time = LaunchConfiguration('use_sim_time')
     declare_container_name_cmd = DeclareLaunchArgument(
@@ -56,6 +64,16 @@ def generate_launch_description():
         'map_params_file',
         default_value=map_params_path,
         description='Full path to the ROS 2 parameters file for map modules',
+    )
+    declare_sensing_launch_file_cmd = DeclareLaunchArgument(
+        'sensing_launch_file',
+        default_value=sensing_launch_path,
+        description='Full path to the ROS 2 launch file for sensing modules',
+    )
+    declare_sensing_params_file_cmd = DeclareLaunchArgument(
+        'sensing_params_file',
+        default_value=sensing_params_path,
+        description='Full path to the ROS 2 parameters file for sensing modules',
     )
     declare_use_composition_cmd = DeclareLaunchArgument(
         'use_composition', default_value='True', description='Whether to use composed nodes'
@@ -91,6 +109,15 @@ def generate_launch_description():
                     'use_sim_time': use_sim_time,
                 }.items(),
             ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([sensing_launch_file]),
+                launch_arguments={
+                    'container_name': container_name,
+                    'sensing_params_file': sensing_params_file,
+                    'use_composition': use_composition,
+                    'use_sim_time': use_sim_time,
+                }.items(),
+            ),
         ]
     )
 
@@ -99,6 +126,8 @@ def generate_launch_description():
             declare_container_name_cmd,
             declare_map_launch_file_cmd,
             declare_map_params_file_cmd,
+            declare_sensing_launch_file_cmd,
+            declare_sensing_params_file_cmd,
             declare_use_composition_cmd,
             declare_use_sim_time_cmd,
             load_nodes,

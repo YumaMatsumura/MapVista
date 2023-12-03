@@ -65,18 +65,29 @@ def generate_launch_description():
                         package='mapvista_map_loader',
                         plugin='mapvista_map_loader::MapLoader',
                         parameters=[{'use_sim_time': use_sim_time}, map_params_file],
+                        remappings=[
+                            ('/pcd_map', '/pcd_map_raw'),
+                        ],
                     ),
                     ComposableNode(
                         name='map_converter_node',
                         package='mapvista_map_converter',
                         plugin='mapvista_map_converter::MapConverter',
                         parameters=[{'use_sim_time': use_sim_time}, map_params_file],
+                        remappings=[
+                            ('/pcd_map', '/pcd_map_filtered'),
+                            ('/octomap', '/octomap_filtered'),
+                        ],
                     ),
                     ComposableNode(
                         name='map_saver_node',
                         package='mapvista_map_saver',
                         plugin='mapvista_map_saver::MapSaver',
                         parameters=[{'use_sim_time': use_sim_time}],
+                        remappings=[
+                            ('/pcd_map', '/pcd_map_filtered'),
+                            ('/octomap', '/octomap_filtered'),
+                        ],
                     ),
                 ],
             )
@@ -91,6 +102,9 @@ def generate_launch_description():
                 package='mapvista_map_loader',
                 executable='map_loader',
                 parameters=[{'use_sim_time': use_sim_time}, map_params_file],
+                remappings=[
+                    ('/pcd_map', '/pcd_map_raw'),
+                ],
                 output='screen',
             ),
             Node(
@@ -98,6 +112,10 @@ def generate_launch_description():
                 package='mapvista_map_converter',
                 executable='map_converter',
                 parameters=[{'use_sim_time': use_sim_time}, map_params_file],
+                remappings=[
+                    ('/pcd_map', '/pcd_map_filtered'),
+                    ('/octomap', '/octomap_filtered'),
+                ],
                 output='screen',
             ),
             Node(
@@ -105,6 +123,7 @@ def generate_launch_description():
                 package='mapvista_map_saver',
                 executable='map_saver',
                 parameters=[{'use_sim_time': use_sim_time}],
+                remappings=[('/pcd_map', '/pcd_map_filtered'), ('/octomap', '/octomap_filtered')],
                 output='screen',
             ),
         ],
