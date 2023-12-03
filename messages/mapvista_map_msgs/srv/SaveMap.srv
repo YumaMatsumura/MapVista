@@ -1,0 +1,6 @@
+string map_yaml_file
+string pcd_map_type
+bool pcd_binary_mode
+string octomap_suffix
+---
+bool result
