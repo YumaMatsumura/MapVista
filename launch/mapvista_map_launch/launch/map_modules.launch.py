@@ -33,6 +33,7 @@ def generate_launch_description():
 
     # Set launch params
     container_name = LaunchConfiguration('container_name')
+    map_file = LaunchConfiguration('map_file')
     map_params_file = LaunchConfiguration('map_params_file')
     use_composition = LaunchConfiguration('use_composition')
     use_sim_time = LaunchConfiguration('use_sim_time')
@@ -40,6 +41,11 @@ def generate_launch_description():
         'container_name',
         default_value='mapvista_container',
         description='The name of conatiner that nodes will load in if use composition',
+    )
+    declare_map_file_cmd = DeclareLaunchArgument(
+        'map_file',
+        default_value='',
+        description='Full path to the map file',
     )
     declare_map_params_file_cmd = DeclareLaunchArgument(
         'map_params_file',
@@ -64,7 +70,11 @@ def generate_launch_description():
                         name='map_loader_node',
                         package='mapvista_map_loader',
                         plugin='mapvista_map_loader::MapLoader',
-                        parameters=[{'use_sim_time': use_sim_time}, map_params_file],
+                        parameters=[
+                            {'use_sim_time': use_sim_time},
+                            {'pcd_map_file': map_file},
+                            map_params_file,
+                        ],
                         remappings=[
                             ('/pcd_map', '/pcd_map_raw'),
                         ],
@@ -132,6 +142,7 @@ def generate_launch_description():
     return LaunchDescription(
         [
             declare_container_name_cmd,
+            declare_map_file_cmd,
             declare_map_params_file_cmd,
             declare_use_composition_cmd,
             declare_use_sim_time_cmd,

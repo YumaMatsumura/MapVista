@@ -44,6 +44,7 @@ def generate_launch_description():
 
     # Set launch params
     container_name = LaunchConfiguration('container_name')
+    map_file = LaunchConfiguration('map_file')
     map_launch_file = LaunchConfiguration('map_launch_file')
     map_params_file = LaunchConfiguration('map_params_file')
     sensing_launch_file = LaunchConfiguration('sensing_launch_file')
@@ -54,6 +55,11 @@ def generate_launch_description():
         'container_name',
         default_value='mapvista_container',
         description='The name of conatiner that nodes will load in if use composition',
+    )
+    declare_map_file_cmd = DeclareLaunchArgument(
+        'map_file',
+        default_value='',
+        description='Full path to the map file',
     )
     declare_map_launch_file_cmd = DeclareLaunchArgument(
         'map_launch_file',
@@ -104,6 +110,7 @@ def generate_launch_description():
                 PythonLaunchDescriptionSource([map_launch_file]),
                 launch_arguments={
                     'container_name': container_name,
+                    'map_file': map_file,
                     'map_params_file': map_params_file,
                     'use_composition': use_composition,
                     'use_sim_time': use_sim_time,
@@ -124,6 +131,7 @@ def generate_launch_description():
     return LaunchDescription(
         [
             declare_container_name_cmd,
+            declare_map_file_cmd,
             declare_map_launch_file_cmd,
             declare_map_params_file_cmd,
             declare_sensing_launch_file_cmd,
