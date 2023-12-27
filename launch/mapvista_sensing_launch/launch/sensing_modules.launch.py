@@ -67,7 +67,17 @@ def generate_launch_description():
                         parameters=[{'use_sim_time': use_sim_time}, sensing_params_file],
                         remappings=[
                             ('/input_pcd', '/pcd_map_raw'),
-                            ('/output_pcd', '/pcd_map_filtered'),
+                            ('/output_pcd', '/pcd_map_voxel_grid_filtered'),
+                        ],
+                    ),
+                    ComposableNode(
+                        name='moving_least_squares_node',
+                        package='mapvista_moving_least_squares',
+                        plugin='mapvista_moving_least_squares::MovingLeastSquares',
+                        parameters=[{'use_sim_time': use_sim_time}, sensing_params_file],
+                        remappings=[
+                            ('/input_pcd', '/pcd_map_voxel_grid_filtered'),
+                            ('/output_pcd', '/pcd_map_mls_filtered'),
                         ],
                     ),
                 ],
@@ -83,7 +93,21 @@ def generate_launch_description():
                 package='mapvista_voxel_grid_filter',
                 executable='voxel_grid_filter',
                 parameters=[{'use_sim_time': use_sim_time}, sensing_params_file],
-                remappings=[('/input_pcd', '/pcd_map_raw'), ('/output_pcd', '/pcd_map_filtered')],
+                remappings=[
+                    ('/input_pcd', '/pcd_map_raw'),
+                    ('/output_pcd', '/pcd_map_voxel_grid_filtered'),
+                ],
+                output='screen',
+            ),
+            Node(
+                name='moving_least_squares_node',
+                package='mapvista_moving_least_squares',
+                executable='moving_least_squares',
+                parameters=[{'use_sim_time': use_sim_time}, sensing_params_file],
+                remappings=[
+                    ('/input_pcd', '/pcd_map_voxel_grid_filtered'),
+                    ('/output_pcd', '/pcd_map_mls_filtered'),
+                ],
                 output='screen',
             ),
         ],

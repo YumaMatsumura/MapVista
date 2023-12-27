@@ -3,3 +3,8 @@ voxel_grid_filter_node:
     voxel_leaf_x: 0.1
     voxel_leaf_y: 0.1
     voxel_leaf_z: 0.1
+
+moving_least_squares_node:
+  ros__parameters:
+    polynomial_order: 5
+    search_radius: 0.5

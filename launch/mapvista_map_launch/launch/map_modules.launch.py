@@ -85,7 +85,7 @@ def generate_launch_description():
                         plugin='mapvista_map_converter::MapConverter',
                         parameters=[{'use_sim_time': use_sim_time}, map_params_file],
                         remappings=[
-                            ('/pcd_map', '/pcd_map_filtered'),
+                            ('/pcd_map', '/pcd_map_mls_filtered'),
                             ('/octomap', '/octomap_filtered'),
                         ],
                     ),
@@ -95,7 +95,7 @@ def generate_launch_description():
                         plugin='mapvista_map_saver::MapSaver',
                         parameters=[{'use_sim_time': use_sim_time}],
                         remappings=[
-                            ('/pcd_map', '/pcd_map_filtered'),
+                            ('/pcd_map', '/pcd_map_mls_filtered'),
                             ('/octomap', '/octomap_filtered'),
                         ],
                     ),
@@ -123,7 +123,7 @@ def generate_launch_description():
                 executable='map_converter',
                 parameters=[{'use_sim_time': use_sim_time}, map_params_file],
                 remappings=[
-                    ('/pcd_map', '/pcd_map_filtered'),
+                    ('/pcd_map', '/pcd_map_mls_filtered'),
                     ('/octomap', '/octomap_filtered'),
                 ],
                 output='screen',
@@ -133,7 +133,10 @@ def generate_launch_description():
                 package='mapvista_map_saver',
                 executable='map_saver',
                 parameters=[{'use_sim_time': use_sim_time}],
-                remappings=[('/pcd_map', '/pcd_map_filtered'), ('/octomap', '/octomap_filtered')],
+                remappings=[
+                    ('/pcd_map', '/pcd_map_mls_filtered'),
+                    ('/octomap', '/octomap_filtered'),
+                ],
                 output='screen',
             ),
         ],

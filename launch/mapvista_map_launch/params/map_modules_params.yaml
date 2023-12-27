@@ -1,10 +1,9 @@
 map_loader_node:
   ros__parameters:
     global_frame_id: map
-    pcd_map_file: ""
     pcd_map_type: XYZI
 
 map_converter_node:
   ros__parameters:
-    octomap_resolution: 0.1
+    octomap_resolution: 0.2
     map_type: XYZI
