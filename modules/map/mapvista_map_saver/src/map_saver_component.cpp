@@ -73,7 +73,7 @@ void MapSaver::saveMapCallback(
     res->result = false;
     return;
   }
-  if (req->octomap_suffix != "bt" || req->octomap_suffix != "ot") {
+  if (req->octomap_suffix != "bt" && req->octomap_suffix != "ot") {
     RCLCPP_ERROR(this->get_logger(), "[INVALID_REQUEST] octomap_type is not bt or ot.");
     res->result = false;
     return;
@@ -97,14 +97,14 @@ void MapSaver::saveMap(
   const auto suffix = map_yaml_file.substr(map_yaml_file.length() - 5, 5);
   auto map_file_name = map_yaml_file.substr(0, map_yaml_file.length() - 5);
   if (suffix != ".yaml") {
-    map_file_name = map_yaml_file;
+    throw std::runtime_error("[INVALID_REQUEST] map_yaml_file is not yaml.");
   }
   const auto pcd_map_file = map_file_name + ".pcd";
   const auto octomap_file = map_file_name + "." + octomap_suffix;
 
   try {
     // Save yaml file
-    saveMapYaml(map_file_name, pcd_map_file, pcd_map_type, octomap_file);
+    saveMapYaml(map_yaml_file, pcd_map_file, pcd_map_type, octomap_file);
 
     // Save pcd map
     savePcdMap(pcd_map_file, pcd_map_type, pcd_binary_mode);
@@ -139,19 +139,19 @@ void MapSaver::savePcdMap(
 {
   if (pcd_map_type == "XYZ") {
     if (this->savePcdFile<pcl::PointXYZ>(pcd_map_file, binary_mode)) {
-      RCLCPP_ERROR(this->get_logger(), "Saved pcd_map with PointXYZ type.");
+      RCLCPP_INFO(this->get_logger(), "Saved pcd_map with PointXYZ type.");
     } else {
       throw std::runtime_error("[INVALID_PCD_MAP] Failed to save pcd file.");
     }
   } else if (pcd_map_type == "XYZRGB") {
     if (this->savePcdFile<pcl::PointXYZRGB>(pcd_map_file, binary_mode)) {
-      RCLCPP_ERROR(this->get_logger(), "Saved pcd_map with PointXYZ type.");
+      RCLCPP_INFO(this->get_logger(), "Saved pcd_map with PointXYZ type.");
     } else {
       throw std::runtime_error("[INVALID_PCD_MAP] Failed to save pcd file.");
     }
   } else if (pcd_map_type == "XYZI") {
     if (this->savePcdFile<pcl::PointXYZI>(pcd_map_file, binary_mode)) {
-      RCLCPP_ERROR(this->get_logger(), "Saved pcd_map with PointXYZ type.");
+      RCLCPP_INFO(this->get_logger(), "Saved pcd_map with PointXYZ type.");
     } else {
       throw std::runtime_error("[INVALID_PCD_MAP] Failed to save pcd file.");
     }
@@ -172,12 +172,12 @@ void MapSaver::saveOctomap(const std::string & octomap_file, const std::string &
   }
 
   if (octree) {
-    if (octomap_suffix == ".bt") {
+    if (octomap_suffix == "bt") {
       if (!octree->writeBinary(octomap_file)) {
         std::string error_message = "Error writing to file " + octomap_file;
         throw std::runtime_error(error_message);
       }
-    } else if (octomap_suffix == ".ot") {
+    } else if (octomap_suffix == "ot") {
       if (!octree->write(octomap_file)) {
         std::string error_message = "Error writing to file " + octomap_file;
         throw std::runtime_error(error_message);
